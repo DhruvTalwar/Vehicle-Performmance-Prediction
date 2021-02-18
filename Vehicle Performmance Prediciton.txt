@@ -1,0 +1,50 @@
+import pandas as pd
+from sklearn import linear_model
+import tkinter as tk 
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+df=pd.read_csv("D:\LMS\ML\Linear Regression with SGD\data.csv")
+
+X = df[['displacement','weight']].astype(float) 
+Y = df['Kilometer_per_liter'].astype(float)
+
+# with sklearn
+regr = linear_model.LinearRegression()
+regr.fit(X, Y)
+
+print('Intercept: \n', regr.intercept_)
+print('Coefficients: \n', regr.coef_)
+root=tk.Tk()
+
+canvas1 = tk.Canvas(root, width = 500, height = 300)
+canvas1.pack()
+
+label1 = tk.Label(root, text='displacement')
+canvas1.create_window(100, 80, window=label1)
+entry1 = tk.Entry (root) 
+canvas1.create_window(270, 80, window=entry1)
+
+label2 = tk.Label(root, text='weight')
+canvas1.create_window(100, 105, window=label2)
+entry2 = tk.Entry (root) 
+canvas1.create_window(270, 105, window=entry2)
+
+
+def values():
+    global disp 
+    disp = int(entry1.get()) 
+    global acc 
+    acc = int(entry2.get())
+ 
+    
+    global Y_predict  
+    Y_predict = ('Predicted Kilometer per liter: ', regr.predict([[disp, acc]]))
+    Prediction = tk.Label(root, text= Y_predict, bg='lightgreen')
+    canvas1.create_window(255, 250, window = Prediction)
+    
+button1 = tk.Button (root, text='Predict Kilometer per liter',command=values, bg='orange')
+canvas1.create_window(270, 200, window=button1)
+
+root.mainloop()
+
